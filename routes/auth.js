@@ -5,7 +5,7 @@ const User = require('../models/user');
 authRouter.post('/signup', async (req, res) => {
 	const { username, password } = req.body;
 
-	console.log(`username, password`, username, password);
+	// console.log(`username, password`, username, password);
 
 	if (!username || !password) {
 		res.status(400).json({
@@ -25,6 +25,7 @@ authRouter.post('/signup', async (req, res) => {
 		saltRounds
 	);
 
+	// try {
 	const user = new User({
 		username,
 		passwordHash
@@ -35,6 +36,9 @@ authRouter.post('/signup', async (req, res) => {
 	// console.log(`savedUser`, savedUser);
 
 	res.status(200).json(savedUser);
+	// } catch (error) {
+	// 	res.status(400).json({ error });
+	// }
 });
 
 module.exports = authRouter;
