@@ -6,6 +6,7 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const authRouter = require('./routes/auth');
+const coursesRouter = require('./routes/courses');
 const middleware = require('./utils/middleware');
 
 mongoose.connect(process.env.MONGODB_URI, {
@@ -17,8 +18,10 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 app.use(cors());
 app.use(express.json());
+app.use(middleware.tokenExtractor);
 
 app.use('/api/auth', authRouter);
+app.use('/api/courses', coursesRouter);
 
 // app.get('/', (req, res) => {
 // 	res.send('<h1>Hello World!!</h1>');
