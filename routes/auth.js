@@ -1,4 +1,6 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { response } = require('express');
 const authRouter = require('express').Router();
 const User = require('../models/user');
 
@@ -39,6 +41,37 @@ authRouter.post('/signup', async (req, res) => {
 	// } catch (error) {
 	// 	res.status(400).json({ error });
 	// }
+});
+
+authRouter.post('/signin', async (req, res) => {
+	const { username, password } = req.body;
+
+	const user = await User.findOne({
+		username
+	});
+
+	const passwordCorrect =
+		user === null
+			? false
+			: await bcrypt.compare(password, user.passwordHash);
+
+	if (!user || !passwordCorrect) {
+		return res.status(401).json({
+			error : 'invalid username or password'
+		});
+	}
+
+	const userForToken = {
+		username,
+		id       : user._id
+	};
+
+	const token = jwt.sign(userForToken, process.env.SECRET);
+
+	res.status(200).send({
+		token,
+		username
+	});
 });
 
 module.exports = authRouter;
