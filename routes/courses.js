@@ -10,6 +10,8 @@ coursesRouter.get('/', async (req, res) => {
 });
 
 coursesRouter.post('/', async (req, res) => {
+	console.log(`req.body`, req.body);
+
 	if (!req.token) {
 		return res
 			.status(401)
@@ -31,12 +33,15 @@ coursesRouter.post('/', async (req, res) => {
 
 	const course = new Course({ ...req.body, user });
 
+	console.log(`course`, course);
+
 	if (!course.title) {
 		res
 			.status(400)
 			.json({ error: 'a course title is required' });
 	} else {
 		const newCourse = await course.save();
+		console.log(`newCourse`, newCourse);
 		user.courses = user.courses.concat(newCourse._id);
 		await user.save();
 
