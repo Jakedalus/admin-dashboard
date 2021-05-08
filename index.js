@@ -16,30 +16,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 	useCreateIndex     : true
 });
 
-console.log(
-	JSON.parse(
-		JSON.stringify({
-			title     : 'Sample Course 3',
-			teacher   : 'Sample Teacher 3',
-			subject   : 'Sample Subject 3',
-			questions : [
-				{
-					question : 'Question 1?',
-					answer   : 'Answer 1'
-				},
-				{
-					question : 'Question 2?',
-					answer   : 'Answer 2'
-				},
-				{
-					question : 'Question 3?',
-					answer   : 'Answer 3'
-				}
-			]
-		})
-	)
-);
-
 app.use(cors());
 app.use(express.json());
 app.use(middleware.tokenExtractor);
