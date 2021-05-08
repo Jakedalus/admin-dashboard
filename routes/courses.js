@@ -89,4 +89,47 @@ coursesRouter.delete('/:id', async (req, res) => {
 	}
 });
 
+coursesRouter.put('/:id', async (req, res) => {
+	const decodedToken = jwt.verify(
+		req.token,
+		process.env.SECRET
+	);
+
+	if (!req.token || !decodedToken) {
+		res
+			.send(401)
+			.json({ error: 'token missing or invalid' });
+	}
+
+	const user = await User.findById(decodedToken.id);
+
+	const courseToUpdate = await Course.findById(
+		req.params.id
+	);
+
+	if (courseToUpdate) {
+		const newCourseInfo = {
+			...req.body
+		};
+		if (
+			user._id.toString() === courseToUpdate.user.toString()
+		) {
+			// console.log('user can update course');
+			const updatedCourse = await Course.findByIdAndUpdate(
+				req.params.id,
+				newCourseInfo,
+				{ new: true }
+			).populate('user');
+
+			if (updatedCourse) {
+				res.status(200).json(updatedCourse);
+			} else {
+				res.status(400).end();
+			}
+		} else {
+			res.status(400).end();
+		}
+	}
+});
+
 module.exports = coursesRouter;
