@@ -10,7 +10,7 @@ const courseSchema = new mongoose.Schema({
 	subject   : String,
 	questions : [
 		{
-			_id      : false,
+			// _id      : false,
 			question : { type: String, required: true },
 			answer   : { type: String, required: true }
 		}
