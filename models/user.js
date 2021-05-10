@@ -1,21 +1,24 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
-const userSchema = new mongoose.Schema({
-	username     : {
-		type      : String,
-		minlength : 3,
-		required  : true,
-		unique    : true
+const userSchema = new mongoose.Schema(
+	{
+		username     : {
+			type      : String,
+			minlength : 3,
+			required  : true,
+			unique    : true
+		},
+		passwordHash : String,
+		courses      : [
+			{
+				type : mongoose.Schema.Types.ObjectId,
+				ref  : 'Course'
+			}
+		]
 	},
-	passwordHash : String,
-	courses      : [
-		{
-			type : mongoose.Schema.Types.ObjectId,
-			ref  : 'Course'
-		}
-	]
-});
+	{ timestamps: true }
+);
 
 userSchema.plugin(uniqueValidator);
 
