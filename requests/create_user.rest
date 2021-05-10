@@ -2,6 +2,8 @@ POST http://localhost:3001/api/auth/signup
 Content-Type: application/json
 
 {
-   "username": "jake3",
-   "password": "jakejake"
+   "username": "jakedalus",
+   "password": "18Fa1%35eU$ten3",
+   "email": "jacob.a.carpenter@gmail.com",
+   "name": "Jacob Carpenter"
 }

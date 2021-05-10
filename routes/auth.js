@@ -2,16 +2,35 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { response } = require('express');
 const authRouter = require('express').Router();
+const validator = require('validator');
 const User = require('../models/user');
 
 authRouter.post('/signup', async (req, res) => {
-	const { username, password } = req.body;
+	const { username, password, email, name } = req.body;
 
 	// console.log(`username, password`, username, password);
 
 	if (!username || !password) {
 		res.status(400).json({
 			error : 'must include username and password'
+		});
+	}
+
+	if (!email) {
+		res.status(400).json({
+			error : 'must include an email'
+		});
+	}
+
+	if (!validator.isEmail(email)) {
+		res.status(400).json({
+			error : 'not a valid email'
+		});
+	}
+
+	if (!name) {
+		res.status(400).json({
+			error : 'must include your name'
 		});
 	}
 
@@ -30,7 +49,9 @@ authRouter.post('/signup', async (req, res) => {
 	// try {
 	const user = new User({
 		username,
-		passwordHash
+		passwordHash,
+		name,
+		email
 	});
 
 	const savedUser = await user.save();
