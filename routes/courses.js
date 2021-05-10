@@ -10,7 +10,9 @@ coursesRouter.get('/', async (req, res) => {
 });
 
 coursesRouter.post('/', async (req, res) => {
+	// console.log(`req`, req);
 	console.log(`req.body`, req.body);
+	// console.log(`req.token`, req.token);
 
 	if (!req.token) {
 		return res
