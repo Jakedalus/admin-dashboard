@@ -96,9 +96,13 @@ authRouter.post('/signin', async (req, res) => {
 
 	const token = jwt.sign(userForToken, process.env.SECRET);
 
+	const { name, email } = user;
+
 	res.status(200).send({
 		token,
-		username
+		username,
+		name,
+		email
 	});
 });
 
