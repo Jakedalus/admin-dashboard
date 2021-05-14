@@ -29,9 +29,11 @@ app.use('/api/auth', authRouter);
 app.use('/api/courses', coursesRouter);
 app.use('/api/users', usersRouter);
 
-// app.get('/', (req, res) => {
-// 	res.send('<h1>Hello World!!</h1>');
-// });
+if (process.env.NODE_ENV === 'test') {
+	console.log('NODE_ENV', process.env.NODE_ENV);
+	const testingRouter = require('./routes/reset');
+	app.use('/api/testing', testingRouter);
+}
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
