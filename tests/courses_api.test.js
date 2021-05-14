@@ -181,6 +181,66 @@ describe('course api tests', () => {
 		expect(response.body).toHaveLength(3);
 		expect(contents).toContain('Sample Course 3');
 	});
+
+	describe('deletion of a course', () => {
+		test('succeeds with status code 200 if id is valid', async () => {
+			const coursesAtStart = await api.get('/api/courses');
+			console.log(
+				`coursesAtStart.body`,
+				coursesAtStart.body
+			);
+			const courseToDelete = coursesAtStart.body[1];
+
+			console.log('courseToDelete', courseToDelete);
+
+			await api
+				.delete(`/api/courses/${courseToDelete.id}`)
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+
+			const coursesAtEnd = await api.get('/api/courses');
+
+			console.log('coursesAtEnd.body', coursesAtEnd.body);
+
+			expect(coursesAtEnd.body).toHaveLength(
+				coursesAtStart.body.length - 1
+			);
+
+			const titles = coursesAtEnd.body.map(r => r.title);
+
+			expect(titles).not.toContain(courseToDelete.title);
+		});
+
+		test('sfails with status code 400 if user is not authorized', async () => {
+			const coursesAtStart = await api.get('/api/courses');
+			console.log(
+				`coursesAtStart.body`,
+				coursesAtStart.body
+			);
+			const courseToDelete = coursesAtStart.body[0];
+
+			const id = mongoose.Types.ObjectId();
+
+			console.log('courseToDelete', courseToDelete);
+
+			await api
+				.delete(`/api/courses/${courseToDelete.id}`)
+				.set('Authorization', 'Bearer ' + token)
+				.expect(400);
+
+			const coursesAtEnd = await api.get('/api/courses');
+
+			console.log('coursesAtEnd.body', coursesAtEnd.body);
+
+			expect(coursesAtEnd.body).toHaveLength(
+				coursesAtStart.body.length
+			);
+
+			const titles = coursesAtEnd.body.map(r => r.title);
+
+			expect(titles).toContain(courseToDelete.title);
+		});
+	});
 });
 
 afterAll(() => {
