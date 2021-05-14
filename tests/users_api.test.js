@@ -116,6 +116,27 @@ test('there are two users', async () => {
 	expect(response.body).toHaveLength(2);
 });
 
+test('attempt to create user with non-unique username fails', async () => {
+	const usersAtStart = await User.find({});
+
+	const newUser = {
+		username : 'francis',
+		name     : 'Jacob A. Carpenter',
+		email    : 'frank.grimes@gmail.com',
+		password : 'another sekret'
+	};
+
+	await api
+		.post('/api/auth/signup')
+		.send(newUser)
+		.expect(400)
+		.expect('Content-Type', /application\/json/);
+
+	const usersAtEnd = await User.find({});
+
+	expect(usersAtEnd).toHaveLength(usersAtStart.length);
+});
+
 afterAll(() => {
 	mongoose.connection.close();
 });
