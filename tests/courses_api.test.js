@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const supertest = require('supertest');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const app = require('../app');
 
 const api = supertest(app);
@@ -66,6 +67,8 @@ const initialCourses = [
 	}
 ];
 
+let token;
+
 beforeEach(async () => {
 	// Initialize Users
 	await User.deleteMany({});
@@ -96,6 +99,20 @@ beforeEach(async () => {
 
 	// console.log(`course1`, course1);
 	// console.log(`course2`, course2);
+
+	// Login francis and get token
+	const user = await User.findOne({
+		username : 'francis'
+	});
+
+	const userForToken = {
+		username : user.username,
+		id       : user._id
+	};
+
+	token = jwt.sign(userForToken, process.env.SECRET);
+
+	// console.log('token', token);
 });
 
 describe('course api tests', () => {
@@ -125,26 +142,45 @@ describe('course api tests', () => {
 		expect(response.body[0].id).toBeDefined();
 	});
 
-	// test('attempt to create user with non-unique username fails', async () => {
-	// 	const usersAtStart = await User.find({});
+	test('new course should be added to the database', async () => {
+		const newCourse = {
+			title     : 'Sample Course 3',
+			teacher   : 'Mr. Fredrick',
+			subject   : 'Math',
+			user      : '609eea9a38af2f0a45b4f831',
+			_id       : '5ff8e97be79f43b594daa4a6',
+			questions : [
+				{
+					question : 'question1',
+					answer   : 'answer1'
+				},
+				{
+					question : 'question2',
+					answer   : 'answer2'
+				},
+				{
+					question : 'question3',
+					answer   : 'answer3'
+				}
+			]
+		};
 
-	// 	const newUser = {
-	// 		username : 'francis',
-	// 		name     : 'Jacob A. Carpenter',
-	// 		email    : 'frank.grimes@gmail.com',
-	// 		password : 'another sekret'
-	// 	};
+		await api
+			.post('/api/courses')
+			.set('Authorization', 'Bearer ' + token)
+			.send(newCourse)
+			.expect(201)
+			.expect('Content-Type', /application\/json/);
 
-	// 	await api
-	// 		.post('/api/auth/signup')
-	// 		.send(newUser)
-	// 		.expect(400)
-	// 		.expect('Content-Type', /application\/json/);
+		const response = await api.get('/api/courses');
 
-	// 	const usersAtEnd = await User.find({});
+		console.log(`response.body`, response.body);
 
-	// 	expect(usersAtEnd).toHaveLength(usersAtStart.length);
-	// });
+		const contents = response.body.map(r => r.title);
+
+		expect(response.body).toHaveLength(3);
+		expect(contents).toContain('Sample Course 3');
+	});
 });
 
 afterAll(() => {
