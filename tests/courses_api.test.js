@@ -241,6 +241,65 @@ describe('course api tests', () => {
 			expect(titles).toContain(courseToDelete.title);
 		});
 	});
+
+	describe('update a course', () => {
+		test('succeeds with status code 204 and updated course if id is valid', async () => {
+			const coursesAtStart = await api.get('/api/courses');
+
+			const courseToUpdate = coursesAtStart.body[1];
+
+			// console.log('courseToUpdate', courseToUpdate);
+
+			const newCourse = {
+				...courseToUpdate,
+				user  : initialUsers[1]._id, // expects populated user field unless this is included
+				title : 'Brand New Title'
+			};
+
+			const updatedCourse = await api
+				.put(`/api/courses/${courseToUpdate.id}`)
+				.set('Authorization', 'Bearer ' + token)
+				.send(newCourse)
+				.expect(200);
+
+			// console.log(`newCourse`, newCourse);
+			// console.log(
+			// 	`updatedCourse.body`,
+			// 	updatedCourse.body
+			// );
+
+			delete newCourse.user;
+			delete updatedCourse.body.user;
+			delete newCourse.updatedAt;
+			delete updatedCourse.body.updatedAt;
+
+			expect(updatedCourse.body).toEqual(newCourse);
+		});
+
+		test('fails with status code 400 because of invalid user', async () => {
+			const coursesAtStart = await api.get('/api/courses');
+
+			const courseToUpdate = coursesAtStart.body[0];
+
+			const newCourse = {
+				...courseToUpdate,
+				user  : initialUsers[0]._id,
+				title : 'Brand New Title'
+			};
+
+			console.log('newCourse', newCourse);
+
+			const updatedCourse = await api
+				.put(`/api/courses/${courseToUpdate.id}`)
+				.set('Authorization', 'Bearer ' + token)
+				.send(newCourse)
+				.expect(400);
+
+			console.log('updatedCourse.body', updatedCourse.body);
+
+			expect(updatedCourse.body).toEqual({});
+		});
+	});
 });
 
 afterAll(() => {
