@@ -6,6 +6,33 @@ There, run
 
 `npm install`
 
+
+
+### Database
+
+Before starting the server, you will need to setup your database and your .env file with the necessary env vars. 
+I recommend [Mongo Atlas](https://www.mongodb.com/cloud/atlas), which I am using 
+for the app. 
+
+Your `.env` file will require the following variables
+
+- MONGODB_URI
+- TEST_MONGODB_URI
+- PORT
+- SECRET
+
+
+the MONGODB_URI and TEST_MONGODB_URI are your regular and test database URIs respectively. Mongo Atlas's documentation can 
+walk you through the necessary steps there.
+
+I just have my PORT set to 3001.
+
+The SECRET var is the salt for your bcrypt has, which must match the REACT_APP_SECRET in the frontend .env (if you are using my frontend).
+
+__Make sure you include .env in your .gitignore!!__
+
+---
+
 Once that is finished, you can start up the app by running
 
 `npm start`
