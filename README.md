@@ -1,4 +1,4 @@
-# Admin Dashboard Frontend
+# Admin Dashboard Backend
 
 Download or clone the code. cd into the directory, `/backend`.
 
