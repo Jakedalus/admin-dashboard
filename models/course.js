@@ -24,6 +24,7 @@ const courseSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
+// rename _id to id and delete __v
 courseSchema.set('toJSON', {
 	transform : (document, returnedObject) => {
 		returnedObject.id = returnedObject._id.toString();

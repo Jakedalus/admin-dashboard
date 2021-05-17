@@ -26,11 +26,7 @@ const userSchema = new mongoose.Schema(
 			unique   : true,
 			validate : [ validator.isEmail, 'invalid email' ]
 		},
-		// gender         : String,
-		// age            : Number,
-		// educationLevel : String,
-		// nativeLang     : String,
-		// englishLevel   : String,
+
 		courses      : [
 			{
 				type : mongoose.Schema.Types.ObjectId,
@@ -43,6 +39,7 @@ const userSchema = new mongoose.Schema(
 
 userSchema.plugin(uniqueValidator);
 
+// rename _id to id and delete __v, delete passwordHash
 userSchema.set('toJSON', {
 	transform : (document, returnedObject) => {
 		returnedObject.id = returnedObject._id.toString();

@@ -9,6 +9,7 @@ const coursesRouter = require('./routes/courses');
 const usersRouter = require('./routes/users');
 const middleware = require('./utils/middleware');
 
+// use the test database or regular database depending on NODE_ENV var
 const MONGODB_URI =
 	process.env.NODE_ENV === 'test'
 		? process.env.TEST_MONGODB_URI
@@ -29,6 +30,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/courses', coursesRouter);
 app.use('/api/users', usersRouter);
 
+// load testingRouter if NODE_ENV is 'test'
 if (process.env.NODE_ENV === 'test') {
 	console.log('NODE_ENV', process.env.NODE_ENV);
 	const testingRouter = require('./routes/reset');

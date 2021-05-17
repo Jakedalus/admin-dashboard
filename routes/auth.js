@@ -147,15 +147,6 @@ authRouter.put('/changepassword', async (req, res) => {
 
 	await User.findByIdAndUpdate(user.id, { passwordHash });
 
-	// const userForToken = {
-	// 	username,
-	// 	id       : user._id
-	// };
-
-	// const token = jwt.sign(userForToken, process.env.SECRET);
-
-	// const { name, email } = user;
-
 	res.status(200).end();
 });
 
