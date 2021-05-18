@@ -2,12 +2,11 @@
 
 ## Setup
 
-Download or clone the code. cd into the directory, `/backend`.
+Download or clone the code. cd into the directory, `/admin-dashboard-backend`.
 
 There, run
 
 `npm install`
-
 
 
 ### Database
@@ -23,9 +22,7 @@ Your `.env` file will require the following variables
 - PORT
 - SECRET
 
-
-the MONGODB_URI and TEST_MONGODB_URI are your regular and test database URIs respectively. Mongo Atlas's documentation can 
-walk you through the necessary steps there.
+The MONGODB_URI and TEST_MONGODB_URI are your regular and test database URIs respectively. Mongo Atlas's documentation can walk you through the necessary steps there.
 
 I just have my PORT set to 3001.
 
@@ -45,7 +42,8 @@ If you are working on the app, it would be useful to use the dev server instead.
 
 `npm run dev`
 
-to start the dev server, which will restart on each save.
+to start the dev server, which uses nodemon to restart on each save.
+
 
 ## To run the integration tests
 
