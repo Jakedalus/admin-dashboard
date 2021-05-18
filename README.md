@@ -1,5 +1,7 @@
 # Admin Dashboard Backend
 
+## Setup
+
 Download or clone the code. cd into the directory, `/backend`.
 
 There, run
@@ -10,7 +12,7 @@ There, run
 
 ### Database
 
-Before starting the server, you will need to setup your database and your .env file with the necessary env vars. 
+If you have the included `.env` file you should be able to run the app. Otherwise you will need to setup your database and your .env file with the necessary env vars. 
 I recommend [Mongo Atlas](https://www.mongodb.com/cloud/atlas), which I am using 
 for the app. 
 
@@ -62,3 +64,10 @@ you can do by running
 You must do this before starting Cypress or it will not work.
 
 
+## Description
+
+The backend consists mostly of 2 API routes, one for RESTfully creating/updating/reading/deleting Courses, another API for Users. The "users route" is split into auth and users files: users is just the route for getting all the users; the auth route is for signing up, signing in, and changing your password. The "reset" route is for resetting the test database before each test: it is only loaded when in 'test' mode.
+
+The "users" in this app are all admins essentially. A further development would be to create separate routes (or update the 'user' model to include 'types') for teachers and students. At the moment, every user is an admin and has full admin privileges in the app.
+
+Courses also have a very simple model for "Questions." Depending on how real life courses are broken up on an app like this, Courses may have a list of Lessons, each of which then would have a list of Questions, preferably questions of various types, not just the simple version implemented here. 
